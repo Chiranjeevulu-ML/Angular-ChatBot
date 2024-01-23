@@ -1,0 +1,209 @@
+<div class="container-fluid">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3">
+            <a href="/"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <img style="width: 180px;" src="./../assets/images/i-logo.jpg" alt="i-logo">
+            </a>
+
+            <ul class="nav nav-pills">
+                <li><i class="fa-sharp fa-light fa-bell"></i></li>
+                <app-auth-button></app-auth-button>
+            </ul>
+        </header>
+    </div>
+</div>
+
+<div class="container-fluid px-0 py-5 i-bg">
+    <div class="container">
+        <div class="search-bg">
+            <form [formGroup]="userTripSearchForm" class="example-form g-1">
+
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select</mat-label>
+                    <mat-select formControlName="source">
+                        <mat-option *ngFor="let list of tripLocationsList" value="{{list.id}}">
+                            {{list.location_name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select</mat-label>
+                    <mat-select formControlName="destination">
+                        <mat-option *ngFor="let list of tripLocationsList" value="{{list.id}}">
+                            {{list.location_name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Source</mat-label>
+              <input formControlName="source" matInput placeholder="Ex. Pizza" value="Telangana">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Destination</mat-label>
+              <input formControlName="destination" matInput placeholder="Ex. Pizza" value="Hyderabad">
+            </mat-form-field> -->
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Choose a date</mat-label>
+                    <input formControlName="start_date" matInput [matDatepicker]="picker">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Choose a date</mat-label>
+                    <input formControlName="end_date" matInput [matDatepicker]="picker_one">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker_one"></mat-datepicker-toggle>
+                    <mat-datepicker #picker_one></mat-datepicker>
+                </mat-form-field>
+
+                <!-- <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input formControlName="start_date" matInput placeholder="Ex. Pizza" value="01/01/2024">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>End Date</mat-label>
+              <input formControlName="end_date" matInput placeholder="Ex. Pizza" value="05/01/2023">
+            </mat-form-field> -->
+                <!-- <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Budget</mat-label>
+              <input matInput placeholder="Ex. Pizza" value="$200-$300">
+            </mat-form-field> -->
+
+            <div class="transport-radio-btns i-check d-flex justify-content-center gap-2 mt-3">
+                <mat-radio-group aria-label="Select an option" formControlName="transport">
+                    <mat-radio-button class="ico-select" value="Flight"><mat-icon>flight_takeoff</mat-icon> <br>Flight</mat-radio-button>
+                    <mat-radio-button class="ico-select" value="Car"><mat-icon>directions_car</mat-icon> <br>Car</mat-radio-button>
+                    <mat-radio-button class="ico-select" value="Bus"><mat-icon>directions_bus</mat-icon> <br>Bus</mat-radio-button>
+                    <mat-radio-button class="ico-select" value="Train"><mat-icon>train</mat-icon> <br>Train</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            
+            <div class="d-flex justify-content-center">
+                <button (click)="userTripSearchFormSubmit()" type="submit"
+                    class="btn btn-primary btn-lg btn-start">Start
+                    Planing</button>
+            </div>
+        </form>
+            
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-0 py-5 bg-main">
+    <div class="container">
+        <h4>Your Plan Details</h4>
+
+
+        <div class="card tripDetails-grid" style="padding: 40px; border-radius: 25px;">
+            
+
+            <ng-container *ngIf="userTripList.activities; then displayRearchResult; else notDisplayRearchResult"></ng-container>
+            <ng-template #displayRearchResult>
+                <ul>
+                    <ng-container *ngFor="let item_list of userTripList.activities">
+                        
+                            <li class="tripDetails-item">
+                                <div class="dot">
+                                    <div class="center"></div>
+                                    <div class="ring"></div>
+                                </div>
+                                <div class='viewmap_btn'>
+                                    Recommended Stay: {{item_list.recommended_stay}}
+                                </div>
+                                <h5>{{item_list.name}}</h5>
+                                <p>{{item_list.description}}</p>
+
+
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 col-xl-7 ps-0">
+                                            <h3 class="moreInfoHeading mt-4 mb-3">More information</h3>
+
+                                            <div class="mb-4">
+                                                <h6 class="my-3 trip-hotel-title"><mat-icon>alarm_on</mat-icon> Activities</h6>
+                                                <mat-chip-set>
+                                                    <ng-container *ngFor="let activity_list of item_list.activity">
+                                                        <mat-chip> {{activity_list}} </mat-chip>
+                                                    </ng-container>
+                                                </mat-chip-set>
+
+                                                <h6 class="my-3 trip-hotel-title"><mat-icon> place</mat-icon> Popular Places</h6>
+                                                <mat-chip-set>
+                                                    <ng-container *ngFor="let popular_places_list of item_list.popular_places">
+                                                        <mat-chip> {{popular_places_list}} </mat-chip>
+                                                    </ng-container>
+                                                </mat-chip-set>
+
+                                                <h6 class="my-3 trip-hotel-title"><mat-icon>domain</mat-icon> Accommodations</h6>
+                                                <ul class="d-flex flex-wrap p-0 gap-2">
+                                                    <ng-container *ngFor="let accommodation_list of item_list.accommodation">
+                                                        <li class="loopCard">
+                                                            <mat-card>
+                                                                <div class="row">
+                                                                    <div class="col-lg-4"><img class="w-100" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt=""></div>
+                                                                    <div class="col-lg-8">
+                                                                        <mat-card-actions>
+                                                                            <div class="mat-card-header-text">
+                                                                                <mat-card-title class="mat-card-title">{{accommodation_list.name}}</mat-card-title>
+                                                                                <mat-card-subtitle class="mat-card-subtitle">{{accommodation_list.coordinates.title}}CN tower & the royal ontario museum</mat-card-subtitle>
+                                                                                <div class="row my-2"><div class="col-lg-5"><mat-icon class="w-40">star</mat-icon>4.4</div><div class="col-lg-7">Night: {{accommodation_list.price_per_night}}</div></div>
+                                                                                <div class="row"><div class="col-lg-12">Address: <br>{{accommodation_list.address}}</div></div>
+                                                                            </div>
+                                                                        </mat-card-actions>
+                                                                    </div>
+                                                                </div>
+                                                            </mat-card>
+                                                        </li>
+                                                    </ng-container>
+                                                </ul>
+
+                                                <h6 class="my-3 trip-hotel-title"><mat-icon> place</mat-icon> Must try Food</h6>
+                                                <ng-container *ngFor="let food_choices_list of item_list.food_choices">
+                                                    <mat-card>
+                                                        <mat-card-title>{{food_choices_list.name}}</mat-card-title>
+                                                        <p>Address: {{food_choices_list.address}}</p>
+                                                        <p>Price: {{food_choices_list.price}}</p>
+                                                    </mat-card>
+                                                </ng-container>
+                                                
+                                                <h6 class="my-3 trip-hotel-title"><mat-icon> place</mat-icon> Transportation</h6>
+                                                <mat-chip-set>
+                                                    <ng-container *ngFor="let transport_mode of item_list.transportation | keyvalue">
+                                                        <mat-chip>{{transport_mode.key}}: {{getTransportMode(transport_mode.value)}}</mat-chip>
+                                                    </ng-container>
+                                                </mat-chip-set>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-12 col-xl-5 ps-0">
+                                            <div class="google-map">
+                                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2990.274257380938!2d-70.56068388481569!3d41.45496659976631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e52963ac45bbcb%3A0xf05e8d125e82af10!2sDos%20Mas!5e0!3m2!1sen!2sus!4v1671220374408!5m2!1sen!2sus" 
+                                                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                    
+                    </ng-container>
+                </ul>
+            </ng-template>
+
+        </div>
+
+
+        <ng-template #notDisplayRearchResult>
+            <div class="search_info">
+                <img src="assets/images/search-icon.svg" alt="logo">
+                <h5>Click the Top Button start your <br>vacation planning.</h5>
+            </div>
+        </ng-template>
+    </div>
+</div>

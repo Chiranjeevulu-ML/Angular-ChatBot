@@ -1,0 +1,24 @@
+
+.transport-radio-btns{
+    .mat-mdc-radio-group{
+         .ico-select {
+            .mdc-radio{
+                opacity: 0;
+                background-color: red;
+            }
+        }
+    }
+}
+
+ ::ng-deep .mdc-radio {
+    background-color: aqua;
+    opacity: 0;
+}
+::ng-deep .mdc-label{
+    position: relative;
+    left: -22px;
+}
+.mat-mdc-radio-checked .mdc-label{
+    color: #fff !important;
+}
+ 

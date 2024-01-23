@@ -1,0 +1,243 @@
+<div class="container-fluid">
+  <div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <img style="width: 180px;" src="./../assets/images/i-logo.jpg" alt="i-logo">
+      </a>
+
+      <ul class="nav nav-pills">
+        <li><i class="fa-sharp fa-light fa-bell"></i></li>
+        <app-auth-button></app-auth-button>
+        <!-- <li class="nav-item"><a href="#" class="nav-link btn-link">Sign In</a></li> -->
+        <!-- <li class="nav-item"><a href="#" class="nav-link btn-link active" aria-current="page">Sign Up</a></li> -->
+      </ul>
+    </header>
+  </div>
+</div>
+
+<div class="container-fluid px-0 py-5 i-bg">
+  <div class="container">
+    <div class="search-bg">
+      <form [formGroup]="userTripSearchForm" class="example-form d-flex g-1">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Select</mat-label>
+          <mat-select formControlName="source">
+            <mat-option *ngFor="let list of tripLocationsList" value="{{list.id}}">
+              {{list.location_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Select</mat-label>
+          <mat-select formControlName="destination">
+            <mat-option *ngFor="let list of tripLocationsList" value="{{list.id}}">
+              {{list.location_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Source</mat-label>
+            <input formControlName="source" matInput placeholder="Ex. Pizza" value="Telangana">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Destination</mat-label>
+            <input formControlName="destination" matInput placeholder="Ex. Pizza" value="Hyderabad">
+          </mat-form-field> -->
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input formControlName="start_date" matInput [matDatepicker]="picker">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input formControlName="end_date" matInput [matDatepicker]="picker_one">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker_one"></mat-datepicker-toggle>
+          <mat-datepicker #picker_one></mat-datepicker>
+        </mat-form-field>
+
+        <!-- <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input formControlName="start_date" matInput placeholder="Ex. Pizza" value="01/01/2024">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input formControlName="end_date" matInput placeholder="Ex. Pizza" value="05/01/2023">
+          </mat-form-field> -->
+        <!-- <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Budget</mat-label>
+            <input matInput placeholder="Ex. Pizza" value="$200-$300">
+          </mat-form-field> -->
+
+
+      </form>
+      <div class="i-check d-flex justify-content-center">
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1"
+            checked>
+          <label class="form-check-label" for="exampleRadios1">
+            Flight
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+          <label class="form-check-label" for="exampleRadios2">
+            Car
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+          <label class="form-check-label" for="exampleRadios3">
+            Bus
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+          <label class="form-check-label" for="exampleRadios4">
+            Train
+          </label>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <button (click)="userTripSearchFormSubmit()" type="submit" class="btn btn-primary btn-lg btn-start">Start
+          Planing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid px-0 py-5 bg-main">
+  <div class="container">
+    <h4>Your Plan Details</h4>
+
+    <ng-container *ngIf="userTripList.activities; then displayRearchResult; else notDisplayRearchResult"></ng-container>
+    <ng-template #displayRearchResult>
+      <div class="card tripDetails-grid" style="padding: 40px; border-radius: 25px;">
+        <ul>
+          <ng-container *ngFor="let item_list of userTripList.activities">
+            <li class="tripDetails-item">
+              <div class="dot">
+                <div class="center"></div>
+                <div class="ring"></div>
+              </div>
+              <div class='viewmap_btn'>
+                <button mat-button (click)="openDialog()">View Map</button>
+              </div>
+              <h5>{{item_list.name}}</h5>
+              <p>{{item_list.description}}</p>
+              <ul class="trip-points">
+                <h5>Activities: Hello</h5>
+                <ng-container *ngFor="let activity_list of item_list.activity">
+                  <li>{{activity_list}}</li>
+                </ng-container>
+              </ul>
+              <ul class="trip-points">
+                <h5>Popular Places:</h5>
+                <ng-container *ngFor="let places_list of item_list.popular_places">
+                  <li>{{places_list}}</li>
+                </ng-container>
+              </ul>
+              <ul class="trip-points">
+                <h5>Must Try Food:</h5>
+                <ng-container *ngFor="let food_list of item_list.food_choices">
+                  <li>{{food_list.name}} - Price {{food_list.price}}</li>
+                </ng-container>
+              </ul>
+              <ul class="trip-points">
+                <h5>Recommended Stay:</h5>
+                <ng-container *ngFor="let accomodation_list of item_list.accommodation">
+                  <li>{{accomodation_list.name}}</li>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+
+        <!--           
+          <ul>
+            <li class="tripDetails-item">
+              <div class="dot">
+                <div class="center"></div>
+                <div class="ring"></div>
+              </div>
+              <div class='viewmap_btn'> View Map</div>
+              <h5>Day 1</h5>
+              <h6>20 July, 2023</h6>
+              <ul class="trip-points">
+                <li>Arrive in Goa and check into your hotel.</li>
+                <li>Hotel The Leela Goa in Goa</li>
+                <li>Explore Panjim, the capital of Goa.</li>
+                <li>Visit the Basilica of Bom Jesus, a UNESCO World Heritage Site.</li>
+                <li>Take a walk along the Mandovi River.</li>
+              </ul>
+            </li>
+            <li class="tripDetails-item">
+              <div class="dot">
+                <div class="center"></div>
+                <div class="ring"></div>
+              </div>
+              <div class='viewmap_btn'> View Map</div>
+              <h5>Day 2</h5>
+              <h6>20 July, 2023</h6>
+              <ul class="trip-points">
+                <li>Arrive in Goa and check into your hotel.</li>
+                <li>Hotel The Leela Goa in Goa</li>
+                <li>Explore Panjim, the capital of Goa.</li>
+                <li>Visit the Basilica of Bom Jesus, a UNESCO World Heritage Site.</li>
+                <li>Take a walk along the Mandovi River.</li>
+              </ul>
+            </li>
+            <li class="tripDetails-item">
+              <div class="dot">
+                <div class="center"></div>
+                <div class="ring"></div>
+              </div>
+              <div class='viewmap_btn'> View Map</div>
+              <h5>Day 3</h5>
+              <h6>20 July, 2023</h6>
+              <ul class="trip-points">
+                <li>Arrive in Goa and check into your hotel.</li>
+                <li>Hotel The Leela Goa in Goa</li>
+                <li>Explore Panjim, the capital of Goa. </li>
+                <li>Visit the Basilica of Bom Jesus, a UNESCO World Heritage Site.</li>
+                <li>Take a walk along the Mandovi River.</li>
+              </ul>
+            </li>
+            <li class="tripDetails-item">
+              <div class="dot">
+                <div class="center"></div>
+                <div class="ring"></div>
+              </div>
+              <div class='viewmap_btn'> View Map</div>
+              <h5>Day 4</h5>
+              <h6>20 July, 2023</h6>
+              <ul class="trip-points">
+                <li>Arrive in Goa and check into your hotel.</li>
+                <li>Hotel The Leela Goa in Goa</li>
+                <li>Explore Panjim, the capital of Goa.</li>
+                <li>Visit the Basilica of Bom Jesus, a UNESCO World Heritage Site.</li>
+                <li>Take a walk along the Mandovi River.</li>
+              </ul>
+            </li>
+          </ul> -->
+
+
+          
+      </div>
+
+    </ng-template>
+    <ng-template #notDisplayRearchResult>
+      <div class="search_info">
+        <img src="assets/images/search-icon.svg" alt="logo">
+        <h5>Click the Top Button start your <br>vacation planning.</h5>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+    <button class="nav-link btn-link" (click)="auth.logout({ logoutParams: { returnTo: document.location.origin+'/new-layout' } })">
+      Log out
+    </button>
+</ng-container>
+<ng-template #loggedOut>
+    <!-- <button class="nav-link btn-link" (click)="auth.loginWithRedirect()">Sign in</button> -->
+    <button class="nav-link btn-link" (click)="handleLogin()">Sign in</button>
+</ng-template>
