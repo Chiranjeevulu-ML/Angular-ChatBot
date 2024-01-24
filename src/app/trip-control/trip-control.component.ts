@@ -15,12 +15,12 @@ import { TripLocationListData } from '../model/data/TripLocationListData';
   templateUrl: './trip-control.component.html',
   styleUrls: ['./trip-control.component.scss']
 })
-export class TripControlComponent implements OnInit{
+export class TripControlComponent implements OnInit {
 
   userTripList: any = [];
   tripLocationsList: TripLocationListModel[] = [];
   userTripSearchForm: FormGroup;
-  submitted:boolean = false;
+  submitted: boolean = false;
 
   constructor(
     private api: API,
@@ -29,8 +29,8 @@ export class TripControlComponent implements OnInit{
     private dateconfig: DateFormatConfig,
     public dialog: MatDialog,
     public auth: AuthService
-  ){
-    auth.user$.subscribe(data=>{
+  ) {
+    auth.user$.subscribe(data => {
       console.log(data);
     });
     this.userTripSearchForm = this.form_builder.group({
@@ -43,21 +43,21 @@ export class TripControlComponent implements OnInit{
 
   openDialog() {
     const dialogRef = this.dialog.open(
-      DialogContentExampleDialogComponent, 
-      {data: {animal: 'panda'},}
+      DialogContentExampleDialogComponent,
+      { data: { animal: 'panda' }, }
     );
-    let ModelData = {title: "Map View"};
+    let ModelData = { title: "Map View" };
     dialogRef.componentInstance.ModelData = ModelData;
     // dialogRef.afterClosed().subscribe(result => {
     //   console.log(`Dialog result: ${result}`);
     // });
   }
-  
+
   ngOnInit() {
     this.tripLocationsList = TripLocationListData();
   }
 
-  public userTripSearchFormSubmit(){
+  public userTripSearchFormSubmit() {
     this.submitted = true;
     if (!this.userTripSearchForm.invalid) {
       let start_date = this.userTripSearchForm.get('start_date')?.value;
@@ -70,44 +70,48 @@ export class TripControlComponent implements OnInit{
       }
       this.userTripSearchSubmit(tripForm);
       this.submitted = false;
-    }else {
+    } else {
       //this.spinner_service.hide();
     }
   }
 
   get userTripSearchFormError() {
-    return this.userTripSearchForm.controls; 
+    return this.userTripSearchForm.controls;
   }
 
   public userTripSearchSubmit(tripSearchForm: any) {
     this.spinner_service.show();
     const url = "http://172.18.1.145:8000/api/trip";
-    this.api.post(url, tripSearchForm).subscribe((response: any) => {
-      //console.log(response);
-      this.userTripList = response.data;
-      this.spinner_service.hide();
-    }, (error: any) => {
-      this.userTripList = [];
-      //console.log(error);
-      this.spinner_service.hide();
+    this.api.post(url, tripSearchForm).subscribe({
+      next: (response: any) => {
+        //console.log(response);
+        this.userTripList = response.data;
+        this.spinner_service.hide();
+      },
+      error: (error: any) => {
+        this.userTripList = [];
+        //console.log(error);
+        this.spinner_service.hide();
+      }
     });
   }
   public getTripLocations() {
     this.spinner_service.show();
     const url = "http://172.18.1.145:8000/api/trip";
-    this.api.get(url).subscribe((response: any) => {
-      let locationList = response.data;
-      // Object.values(locationList).forEach(val =>{
-      //   this.tripLocationsList.push(val);
-      // });
-      //console.log(this.tripLocationsList);
-      this.spinner_service.hide();
-    }, (error: any) => {
-      this.tripLocationsList = [];
-      //console.log(error);
-      this.spinner_service.hide();
+    this.api.get(url).subscribe({
+      next: (response) => {
+        let locationList = response.data;
+        // Object.values(locationList).forEach(val =>{
+        //   this.tripLocationsList.push(val);
+        // });
+        //console.log(this.tripLocationsList);
+        this.spinner_service.hide();
+      },
+      error: (error) => {
+        this.tripLocationsList = [];
+        //console.log(error);
+        this.spinner_service.hide();
+      }
     });
   }
-
-
 }
